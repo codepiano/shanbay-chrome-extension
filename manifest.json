@@ -1,0 +1,17 @@
+{
+    "name": "扇贝",
+    "version": "1.0",
+    "description": "扇贝页面改造",
+    "content_scripts": [
+        {
+            "matches": ["http://www.shanbay.com/bdc/review/"],
+            "css": ["css/cook.css"],
+            "js": ["js/jquery.min.js", "js/lodash.min.js", "js/cook.js"]
+        }
+    ],
+    "permissions": [
+        "cookies",
+        "http://www.shanbay.com/bdc/review/"
+    ],
+    "manifest_version": 2
+}
