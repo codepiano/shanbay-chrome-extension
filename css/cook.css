@@ -6,7 +6,7 @@ ul.definition {
 li.definition-group-item {
     font-size: 16px;
     line-height: 20px;
-    padding: 10px 15px;
+    padding: 8px;
     position: relative;
     display: block;
     margin-bottom: -1px;
@@ -14,7 +14,6 @@ li.definition-group-item {
 }
 
 ul.example {
-    padding-top: 10px;
 }
 
 li.example-group-item {
@@ -26,6 +25,11 @@ li.example-group-item {
 
 p.annotation {
     font-size: 16px;
+    padding: 5px;
+}
+
+p.def {
+    padding-left: 10px;
 }
 
 span.translation {
@@ -45,4 +49,32 @@ li > vocab {
 
 p > vocab {
     color: #4275BA;
+}
+
+span.posp {
+    margin-right: 5px;
+    color: #FF7E00;
+}
+
+p.def {
+    margin: 0px;
+}
+
+
+a.webster:link {
+  color: #1077BC;
+}
+
+a.webster:hover {
+  color: #FF9900;
+  text-decoration: none;
+}
+
+a.webster:active {
+  color: #FF6699;
+  text-decoration: none;
+}
+
+a.webster:visited {
+  color: #FF6699;
 }

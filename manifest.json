@@ -6,12 +6,19 @@
         {
             "matches": ["http://www.shanbay.com/bdc/review/"],
             "css": ["css/cook.css"],
-            "js": ["js/jquery.min.js", "js/lodash.min.js", "js/cook.js"]
+            "js": ["js/jquery.min.js", "js/lodash.min.js", "js/string-format.js", "cook.js"]
         }
     ],
     "permissions": [
         "cookies",
-        "http://www.shanbay.com/bdc/review/"
+        "webRequest",
+        "webRequestBlocking",
+        "http://www.shanbay.com/bdc/review/",
+        "http://fanyi.baidu.com/v2transapi"
     ],
+    "background": {
+        "scripts": ["season.js"],
+        "persistent": true
+    },
     "manifest_version": 2
 }
