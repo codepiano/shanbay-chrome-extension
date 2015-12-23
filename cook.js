@@ -101,6 +101,10 @@ function loadDefineFromBaiduDict(word) {
             return;
         }
         var collins = result.dict_result.collins;
+        // 网速过慢或者页面加载过快
+        if(collins.word_name !== current_word) {
+            return;
+        }
         var html = '<ul class="menu">';
         if(collins.menus) {
             var menus = _.sortBy(collins.menus, 'item_id');
