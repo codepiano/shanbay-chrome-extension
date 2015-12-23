@@ -30,7 +30,7 @@ function reviewContentChange(mutations) {
         return;
     }
     // 找出包含单词详细解释的 div 元素
-    var learningDetailContainer = _.find(learningBox.children, function(node){return _.includes(node.classList, 'learning-detail-container') && !_.includes(node.classList, 'hide');});
+    var learningDetailContainer = _.find(learningBox.children, function(node){return _.includes(node.classList, 'learning-detail-container');});
     if(!learningDetailContainer) {
         return;
     }
@@ -78,7 +78,7 @@ function collinsSalad(word) {
 
 // 判断柯林斯辞典是否过期
 function collinsEnabled() {
-    return visible($('a.defn-trigger.collins.sblink'));
+    return $('a.defn-trigger.collins.sblink').css('display') === 'inline';
 }
 
 // 加载百度翻译中的柯林斯辞典
