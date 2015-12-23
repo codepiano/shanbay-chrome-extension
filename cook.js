@@ -1,7 +1,10 @@
 var review = $('#review');
 var observer = new MutationObserver(reviewContentChange);
 var config = { childList: true };
+
+// 添加 DOM 事件监听
 observer.observe(review[0], config);
+// 扩展原生字符串对象
 format.extend(String.prototype, {});
 
 var len = 0;
@@ -14,8 +17,13 @@ var shanbayAPI = {
 var baiduAPI = {
     translateV2: 'http://fanyi.baidu.com/v2transapi'
 };
-var current_word;
+var options = {
+    wordTranslate: true,
+    exampleTranslate: true
+};
 
+
+var current_word;
 var WordsBook = {};
 
 function reviewContentChange(mutations) {
@@ -45,6 +53,8 @@ function reviewContentChange(mutations) {
     } else {
         current_word = wordText;
     }
+    // 加载插件选项
+    restore_options();
     var word = WordsBook[wordText];
     if(!word) {
         // 加载单词列表
@@ -109,7 +119,7 @@ function loadDefineFromBaiduDict(word) {
         if(collins.menus) {
             var menus = _.sortBy(collins.menus, 'item_id');
             html = _.reduce(menus, function(html, menu) {
-                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><span class="tran">{0.tran}</span><p class="trans">{0.tran}</p><p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p><ul class="example">{1}</ul></li>';
+                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><p class="trans">{0.tran}</p><p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p><ul class="example">{1}</ul></li>';
                 return html + shanbayTemplate.format(menu, getEntrysHtml(menu.entry));
             }, html);
         } else {
@@ -133,7 +143,7 @@ function loadDefineFromBaiduDict(word) {
                 if(!definition.def && !definition.tran && exampleHtml === '') {
                     return html;
                 }
-                var baiduFanyiTemplate = '<span class="definition-index pull-left">{0}. </span><li class="definition-group-item"><span class="posp pull-left">{1}</span><p class="trans">{2.tran}</p><p class="def">{2.def}</p><ul class="example">{3}</ul></li>';
+                var baiduFanyiTemplate = '<span class="definition-index pull-left">{0}. </span><li class="definition-group-item"><span class="posp pull-left">{1}</span>' + (options.wordTranslate ? '<p class="trans">{2.tran}</p>' : '') + '<p class="def">{2.def}</p><ul class="example">{3}</ul></li>';
                 return html + baiduFanyiTemplate.format(index + 1, !!definition.posp && _.pluck(definition.posp, 'label').join(', '), definition, exampleHtml);
             }, '<ul class="definition">' + boxrHtml);
 
@@ -147,7 +157,7 @@ function loadDefineFromBaiduDict(word) {
             }
             meanTypes = _.chain(meanTypes).filter(function(mean){ return _.contains(['example', 'posc'], mean.info_type);}).sortBy('info_id').value();
             var html = _.reduce(meanTypes, function(html, meanType){
-                var meanTypeTemplate = '<li class="example-group-item"><p class="def">{def}</p><p class="annotation">{ex}</p><span class="translation">{tran}</span></li>';
+                var meanTypeTemplate = '<li class="example-group-item"><p class="def">{def}</p><p class="annotation">{ex}</p>' + (options.exampleTranslate ? '<span class="translation">{tran}</span>' : '') + '</li>';
                 var example = meanType.example ? meanType.example[0] : meanType.posc[0].example[0];
                 return html + meanTypeTemplate.format(example);
             }, '');
@@ -209,7 +219,7 @@ function loadCollinsView(word) {
 
     function getExamplesHtml(examples) {
         return _.reduce(examples, function(html, example){
-            var exampleTemplate = '<li class="example-group-item"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span><p class="annotation">{annotation}</p><span class="translation">{translation}</span></li>';
+            var exampleTemplate = '<li class="example-group-item"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span><p class="annotation">{annotation}</p>' + (options.exampleTranslate ? '<span class="translation">{translation}</span>' : '') + '</li>';
             return html + exampleTemplate.format(example);
         }, '');
     }
@@ -269,4 +279,13 @@ function replaceDefaultDefinition(html) {
     }
     reviewDefinitions.html(html);
     $('#learning-examples-box').remove();
+}
+
+function restore_options() {
+    chrome.storage.sync.get({
+        wordTranslate: true,
+        exampleTranslate: true
+    }, function(items) {
+        options = items;
+    });
 }

@@ -13,12 +13,17 @@
         "cookies",
         "webRequest",
         "webRequestBlocking",
+        "storage",
         "http://www.shanbay.com/bdc/review/",
         "http://fanyi.baidu.com/v2transapi"
     ],
     "background": {
         "scripts": ["season.js"],
         "persistent": true
+    },
+    "options_ui": {
+        "page": "options.html",
+        "chrome_style": true
     },
     "manifest_version": 2
 }
