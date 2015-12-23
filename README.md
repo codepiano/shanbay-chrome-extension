@@ -9,6 +9,9 @@
 
 插件的主要目的是改善柯林斯词典的体验，一次性加载所有的释义和相关例句。其他功能看心情加的。
 
+### 效果
+![image](https://github.com/codepiano/shanbay-chrome-extension/blob/master/image/intro.jpg)
+
 插件功能：
 
 1. 加载单词所有的扇贝柯林斯例句
