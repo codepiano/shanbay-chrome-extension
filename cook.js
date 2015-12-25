@@ -106,8 +106,8 @@ function loadDefineFromBaiduDict(word) {
         method: 'POST'
     })
     .done(function(result){
-        if(!result.dict_result || !result.dict_result.collins) {
-            console.log('faided to load baidu fanyi');
+        if(!result.dict_result || !result.dict_result.collins || result.dict_result.collins.entry.length === 0) {
+            console.log('load nothing from baidu fanyi');
             return;
         }
         var collins = result.dict_result.collins;
