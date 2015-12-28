@@ -157,7 +157,7 @@ function loadDefineFromBaiduDict(word) {
             }
             meanTypes = _.chain(meanTypes).filter(function(mean){ return _.contains(['example', 'posc'], mean.info_type);}).sortBy('info_id').value();
             var html = _.reduce(meanTypes, function(html, meanType){
-                var meanTypeTemplate = '<li class="example-group-item"><p class="def">{def}</p><p class="annotation">{ex}</p>' + (options.exampleTranslate ? '<span class="translation">{tran}</span>' : '') + '</li>';
+                var meanTypeTemplate = '<li class="example-group-item"><p class="def">{def}</p><p class="annotation">{ex}</p>' + (options.exampleTranslate ? '<p class="translation">{tran}</p>' : '') + '</li>';
                 var example = meanType.example ? meanType.example[0] : meanType.posc[0].example[0];
                 return html + meanTypeTemplate.format(example);
             }, '');
@@ -219,7 +219,7 @@ function loadCollinsView(word) {
 
     function getExamplesHtml(examples) {
         return _.reduce(examples, function(html, example){
-            var exampleTemplate = '<li class="example-group-item"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span><p class="annotation">{annotation}</p>' + (options.exampleTranslate ? '<span class="translation">{translation}</span>' : '') + '</li>';
+            var exampleTemplate = '<li class="example-group-item"><p class="annotation">{annotation}</p>' + (options.exampleTranslate ? '<span class="translation">{translation}</span>' : '') + '</li>';
             return html + exampleTemplate.format(example);
         }, '');
     }

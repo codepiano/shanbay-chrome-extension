@@ -14,13 +14,15 @@ li.definition-group-item {
 }
 
 ul.example {
+    margin-top: 10px;
 }
 
 li.example-group-item {
     line-height: 20px;
     display: block;
-    padding: 5px;
-    margin-bottom: -1px;
+    padding: 2px;
+    margin-bottom: 10px;
+    border-left: solid 4px #5CB85C;
 }
 
 p.annotation {
@@ -32,15 +34,16 @@ p.def {
     padding-left: 10px;
 }
 
-span.translation {
+p.translation {
     font-size: 14px;
     color: #777;
+    padding-left: 5px;
 }
 
 .definition-index {
     font-size: 16px;
     line-height: 20px;
-    padding: 10px 15px;
+    padding: 8px;
 }
 
 li > vocab {
