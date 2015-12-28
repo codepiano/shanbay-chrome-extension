@@ -119,13 +119,16 @@ function loadDefineFromBaiduDict(word) {
         if(collins.menus) {
             var menus = _.sortBy(collins.menus, 'item_id');
             html = _.reduce(menus, function(html, menu) {
-                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><p class="trans">{0.tran}</p><p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p><ul class="example">{1}</ul></li>';
+                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><p class="trans">{0.tran}</p><p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p>{1}</li>';
                 return html + shanbayTemplate.format(menu, getEntrysHtml(menu.entry));
             }, html);
         } else {
             html = getEntrysHtml(collins.entry);
         }
-        replaceDefaultDefinition(html);
+        // 结果可能为空
+        if(html !== '<ul class="definition"></ul>') {
+            replaceDefaultDefinition(html);
+        }
 
         function getEntrysHtml(entrys) {
             var boxr = _.find(entrys, function(mean){ return mean.type === 'boxr';});
@@ -134,7 +137,7 @@ function loadDefineFromBaiduDict(word) {
                 boxrHtml = '<p class="boxr">{boxr_value}</p>'.format(boxr.value[0]);
             }
             entrys = _.chain(entrys).filter(function(mean){ return mean.type === 'mean';}).sortBy('entry_id').value();
-            return _.reduce(entrys, function(html, mean, index) {
+            var entryHtml = _.reduce(entrys, function(html, mean, index) {
                 var definition = mean.value[0];
                 var exampleHtml = '';
                 if(definition.mean_type.length !== 0 && !_.contains(['xrsa'], definition.mean_type[0].info_type)) {
@@ -146,7 +149,7 @@ function loadDefineFromBaiduDict(word) {
                 var baiduFanyiTemplate = '<span class="definition-index pull-left">{0}. </span><li class="definition-group-item"><span class="posp pull-left">{1}</span>' + (options.wordTranslate ? '<p class="trans">{2.tran}</p>' : '') + '<p class="def">{2.def}</p><ul class="example">{3}</ul></li>';
                 return html + baiduFanyiTemplate.format(index + 1, !!definition.posp && _.pluck(definition.posp, 'label').join(', '), definition, exampleHtml);
             }, '<ul class="definition">' + boxrHtml);
-
+            return entryHtml + '</ul>';
         }
 
         function getExamplesHtml(meanTypes) {
@@ -156,6 +159,9 @@ function loadDefineFromBaiduDict(word) {
                 defxHtml = '<li class="example-group-item"><p class="trans">{tran}</p><p class="def">{def}</p></li>'.format(example.defx);
             }
             meanTypes = _.chain(meanTypes).filter(function(mean){ return _.contains(['example', 'posc'], mean.info_type);}).sortBy('info_id').value();
+            if(meanTypes.length === 0) {
+                return '';
+            }
             var html = _.reduce(meanTypes, function(html, meanType){
                 var meanTypeTemplate = '<li class="example-group-item"><p class="def">{def}</p><p class="annotation">{ex}</p>' + (options.exampleTranslate ? '<p class="translation">{tran}</p>' : '') + '</li>';
                 var example = meanType.example ? meanType.example[0] : meanType.posc[0].example[0];
