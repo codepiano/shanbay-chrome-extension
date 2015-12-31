@@ -3,21 +3,44 @@
     <head>
         <title>选项</title>
         <style>
-            body: { padding: 10px; }
+            body { padding: 10px; }
+
+            p,span {
+                font-size: 16px;
+            }
+
+            .option {
+                margin: 10px;
+            }
+
+            .status {
+                font-size: 16px;
+                color: #777;
+            }
+
+            .note {
+                font-size: 14px;
+                color: #777;
+                padding-left: 5px;
+            }
         </style>
     </head>
-
     <body>
-        <p>选项:</p>
-        <label>
-            <input type="checkbox" id="word_translate"> 显示词义的汉语解释
-        </label>
-        <br/>
-        <label>
-            <input type="checkbox" id="example_translate"> 显示例句的汉语解释
-        </label>
-        <br/>
         <div id="status"></div>
+        <p>选项:</p>
+        <label class="option">
+            <input type="checkbox" id="word_translate"> <span class="option-intro">显示词义的汉语解释</span>
+        </label>
+        <br/>
+        <label class="option">
+            <input type="checkbox" id="example_translate"> <span class="option-intro">显示例句的汉语解释</span>
+        </label>
+        <br/>
+        <label class="option">
+            <input type="checkbox" id="use_baidu_collins"> <span class="option-intro">使用百度翻译柯林斯（推荐）</span>
+        </label>
+        <p class="note">由于扇贝自身限制，使用扇贝柯林斯词典加载速度会比较慢</p>
+        <br/>
         <br/>
         <button id="save">保存</button>
         <script src="./js/options.js"></script>
