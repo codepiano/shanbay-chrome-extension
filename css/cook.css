@@ -81,3 +81,52 @@ a.webster:active {
 a.webster:visited {
   color: #FF6699;
 }
+
+ul.image-search {
+    font-size: 16px;
+    list-style: none;
+    padding: 4px;
+    margin: 4px;
+}
+
+ul.image-search > li {
+    margin-top: 6px;
+}
+
+.g {
+    font-size: 18px;
+    color: #5D84F1;
+    font-weight: bold;
+}
+
+.lo {
+    font-size: 18px;
+    color: #CF4F39;
+    font-weight: bold;
+}
+
+.ro {
+    font-size: 18px;
+    color: #ECBE2A;
+    font-weight: bold;
+}
+
+.l {
+    font-size: 18px;
+    color: #63A657;
+    font-weight: bold;
+}
+
+.e {
+    font-size: 18px;
+    color: #CF4F39;
+    font-weight: bold;
+}
+
+.wolfam {
+    color: #BD2F24;
+}
+
+.alpha {
+    color: #DE862D;
+}

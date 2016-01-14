@@ -9,18 +9,30 @@ format.extend(String.prototype, {});
 
 var len = 0;
 var step = 14;
+
 var shanbayAPI = {
     wordsList: 'http://www.shanbay.com/api/v1/bdc/review/',
     wordDefines: 'http://www.shanbay.com/api/v1/bdc/vocabulary/definitions/',
     wordExample: 'http://www.shanbay.com/api/v1/bdc/example/sys/'
 };
+
 var baiduAPI = {
     translateV2: 'http://fanyi.baidu.com/v2transapi'
 };
+
+var imageSearchUrlTemplate = {
+    baidu: 'http://image.baidu.com/search/index?tn=baiduimage&word={0}',
+    google: 'http://www.google.com/search?tbm=isch&q={0}',
+    wolframalpha :'http://www.wolframalpha.com/input/?i={0}'
+};
+
 var options = {
     wordTranslate: true,
     exampleTranslate: true,
-    useBaiduCollins: true
+    useBaiduCollins: true,
+    googleImage: true,
+    wolframalpha: true,
+    baiduImage: true
 };
 
 
@@ -73,7 +85,9 @@ function reviewContentChange(mutations) {
 
     // 改变页面，加载功能
     function changeView(word) {
+        $('a.continue.continue-button').remove();
         websterLink();
+        imageLink();
         collinsSalad(word);
         $('#notes-box').remove();
     }
@@ -89,11 +103,33 @@ function getWordNodeText() {
     return $.trim(wordNode.contents().get(0).nodeValue);
 }
 
+// 添加韦氏词典
 function websterLink() {
     var wordNode = $('#learning_word h1.content');
     var small = wordNode.contents().get(1).outerHTML;
     var websterTemplate = '<a class="webster" target="_blank" href="http://www.merriam-webster.com/dictionary/{0}">{1}</a>' + small;
     wordNode.html(websterTemplate.format(encodeURIComponent(current_word), current_word));
+}
+
+// 添加图片搜索链接
+function imageLink() {
+    var imageDiv = $('div.image');
+    var imageSearchDiv = '<ul class="image-search">{0}</ul>';
+    var listItemTemplate = '<li><a href="{0}" target="_blank">{1}</a></li>';
+    var encodeQueryWord = encodeURIComponent(current_word);
+    var listItems = '';
+    if(options.googleImage) {
+        var googleColorfulWorld = '<span class="g">G<span><span class="lo">o</span><span class="ro">o</span><span class="g">g</span><span class="l">l</span><span class="e">e</span>';
+        listItems += listItemTemplate.format(imageSearchUrlTemplate.google.format(encodeQueryWord), googleColorfulWorld);
+    }
+    if(options.baiduImage) {
+        listItems += listItemTemplate.format(imageSearchUrlTemplate.baidu.format(encodeQueryWord), '<span class="baidu">百度</span>');
+    }
+    if(options.wolframalpha) {
+        var wolframAlphaColorfulWorld = '<span class="wolfram">Wolfram</span><span class="alpha">Alpha<span>';
+        listItems += listItemTemplate.format(imageSearchUrlTemplate.wolframalpha.format(encodeQueryWord), wolframAlphaColorfulWorld);
+    }
+    imageDiv.after(imageSearchDiv.format(listItems));
 }
 
 function collinsSalad(word) {
@@ -198,6 +234,7 @@ function loadDefineFromBaiduDict(wordText) {
             }
         })
         .fail(function () {
+            console.log('can not load baidu fanyi, ajax failed');
         });
 }
 
@@ -323,7 +360,10 @@ function restore_options(callback) {
     chrome.storage.sync.get({
         wordTranslate: true,
         exampleTranslate: true,
-        useBaiduCollins: true
+        useBaiduCollins: true,
+        googleImage: true,
+        wolframalpha: true,
+        baiduImage: true
     }, function (items) {
         options = items;
         callback();
