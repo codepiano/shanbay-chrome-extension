@@ -17,6 +17,10 @@
         "http://www.shanbay.com/bdc/review/",
         "http://fanyi.baidu.com/v2transapi"
     ],
+    "icons": {
+        "16": "./image/conch16.png",
+        "128": "./image/conch128.png"
+    },
     "background": {
         "scripts": ["season.js"],
         "persistent": true
