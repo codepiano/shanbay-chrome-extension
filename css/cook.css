@@ -82,6 +82,10 @@ a.webster:visited {
   color: #FF6699;
 }
 
+sub.title {
+    font-size: 14px;
+}
+
 ul.image-search {
     font-size: 16px;
     list-style: none;
@@ -96,31 +100,26 @@ ul.image-search > li {
 .g {
     font-size: 18px;
     color: #5D84F1;
-    font-weight: bold;
 }
 
 .lo {
     font-size: 18px;
     color: #CF4F39;
-    font-weight: bold;
 }
 
 .ro {
     font-size: 18px;
     color: #ECBE2A;
-    font-weight: bold;
 }
 
 .l {
     font-size: 18px;
     color: #63A657;
-    font-weight: bold;
 }
 
 .e {
     font-size: 18px;
     color: #CF4F39;
-    font-weight: bold;
 }
 
 .wolfam {

@@ -27,7 +27,7 @@ function restore_options() {
         exampleTranslate: true,
         useBaiduCollins: true,
         googleImage: true,
-        wolframalpha: true,
+        wolframalpha: false,
         baiduImage: true
     }, function (items) {
         document.getElementById('word_translate').checked = items.wordTranslate;
