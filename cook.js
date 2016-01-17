@@ -13,7 +13,6 @@ var keyBinding= {
     87: 'wolframalpha'
 };
 $(document).keyup(function(event){
-    console.log('111');
     if (keyBinding.hasOwnProperty(event.which)) {
         var link = $('#' + keyBinding[event.which]);
         if(link[0]) {
@@ -115,15 +114,16 @@ function getWordNodeText() {
     if (!wordNode) {
         return null;
     }
-    return $.trim(wordNode.contents().get(0).nodeValue);
+    return $.trim(wordNode.contents().get(0).nodeValue.replace(/·/g, ''));
 }
 
 // 添加韦氏词典
 function websterLink() {
     var wordNode = $('#learning_word h1.content');
+    var word = $.trim(wordNode.contents().get(0).nodeValue);
     var small = wordNode.contents().get(1).outerHTML;
     var websterTemplate = '<a class="webster" target="_blank" href="http://www.merriam-webster.com/dictionary/{0}">{1}<sub class="title">韦氏词典</sub></a>&nbsp;' + small;
-    wordNode.html(websterTemplate.format(encodeURIComponent(current_word), current_word));
+    wordNode.html(websterTemplate.format(encodeURIComponent(current_word), word));
 }
 
 // 添加图片搜索链接
