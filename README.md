@@ -3,14 +3,18 @@
 
 这个插件不能帮你免费获得扇贝提供的扩展服务，所有的插件功能建立在你首先付费购买扇贝网服务的前提下
 
-插件的主要目的是改善柯林斯词典的体验，一次性加载所有的释义和相关例句
+插件的主要目的是改善柯林斯词典的体验，直接加载单词所有的释义和相关例句
 
 ### 效果
 ![image](https://github.com/codepiano/shanbay-chrome-extension/blob/master/image/intro.jpg)
 
 ### 安装方式
 
-现在还在 beta 阶段，没有上传到官方市场，想使用的可以临时用开发者模式加载插件
+#### 市场版本
+
+[chrome webstore](https://chrome.google.com/webstore/detail/%E6%89%87%E8%B4%9D/aanmfalgnenapmgaeaknhahbclkbealk?hl=en-US)
+
+#### dev版本
 
 在 chrome 扩展页面勾选「开发者模式」，加载插件源码目录，在背单词页面即可使用
 
@@ -30,7 +34,6 @@
 todo:
 
 1. 完善插件配置页面
-1. 图片功能增强
 1. 词根功能增强
 
 有建议可以提 issue
