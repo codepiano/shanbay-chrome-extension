@@ -176,11 +176,15 @@ function loadDefineFromBaiduDict(wordText) {
         method: 'POST'
     })
     .done(function (result) {
-        if (!result.dict_result || !result.dict_result.collins || result.dict_result.collins.entry.length === 0) {
+        if (!result.dict_result || !result.dict_result.collins) {
             console.log('load nothing from baidu fanyi');
             return;
         }
         var collins = result.dict_result.collins;
+        if(!collins.menus && !collins.entry || collins.entry.length === 0) {
+            console.log('load nothing from baidu fanyi');
+            return;
+        }
         // 网速过慢或者页面加载过快
         if (collins.word_name !== current_word) {
             return;
