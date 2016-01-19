@@ -1,6 +1,7 @@
 function save_options() {
     var wordTranslate = document.getElementById('word_translate').checked;
     var exampleTranslate = document.getElementById('example_translate').checked;
+    var hideNotes = document.getElementById('hide_notes').checked;
     var useBaiduCollins = document.getElementById('use_baidu_collins').checked;
     var googleImage = document.getElementById('google_image').checked;
     var wolframalpha  = document.getElementById('wolframalpha').checked;
@@ -8,6 +9,7 @@ function save_options() {
     chrome.storage.sync.set({
         wordTranslate: wordTranslate,
         exampleTranslate: exampleTranslate,
+        hideNotes: hideNotes,
         useBaiduCollins: useBaiduCollins,
         googleImage: googleImage,
         wolframalpha: wolframalpha,
@@ -32,6 +34,7 @@ function restore_options() {
     }, function (items) {
         document.getElementById('word_translate').checked = items.wordTranslate;
         document.getElementById('example_translate').checked = items.exampleTranslate;
+        document.getElementById('hide_notes').checked = items.hideNotes;
         document.getElementById('use_baidu_collins').checked = items.useBaiduCollins;
         document.getElementById('google_image').checked = items.googleImage;
         document.getElementById('wolframalpha').checked = items.wolframalpha;

@@ -43,6 +43,7 @@ var imageSearchUrlTemplate = {
 var options = {
     wordTranslate: true,
     exampleTranslate: true,
+    hideNotes: false,
     useBaiduCollins: true,
     googleImage: true,
     wolframalpha: false,
@@ -103,7 +104,9 @@ function reviewContentChange(mutations) {
         websterLink();
         imageLink();
         collinsSalad(word);
-        $('#notes-box').remove();
+        if(options.hideNotes) {
+            $('#notes-box').remove();
+        }
     }
 }
 
@@ -128,7 +131,7 @@ function websterLink() {
 
 // 添加图片搜索链接
 function imageLink() {
-    var imageDiv = $('div.image');
+    var imageDiv = $('#cliparts');
     var imageSearchDiv = '<ul class="image-search">{0}</ul>';
     var listItemTemplate = '<li><a href="{0}" id="{1}" target="_blank">{2}</a></li>';
     var encodeQueryWord = encodeURIComponent(current_word);
@@ -144,7 +147,7 @@ function imageLink() {
         var wolframAlphaColorfulWorld = '<span class="wolfram">Wolfram</span><span class="alpha">Alpha<span>';
         listItems += listItemTemplate.format(imageSearchUrlTemplate.wolframalpha.format(encodeQueryWord),  'wolframalpha', wolframAlphaColorfulWorld);
     }
-    imageDiv.after(imageSearchDiv.format(listItems));
+    imageDiv.append(imageSearchDiv.format(listItems));
 }
 
 function collinsSalad(word) {
@@ -379,6 +382,7 @@ function restore_options(callback) {
     chrome.storage.sync.get({
         wordTranslate: true,
         exampleTranslate: true,
+        hideNotes: false,
         useBaiduCollins: true,
         googleImage: true,
         wolframalpha: false,
