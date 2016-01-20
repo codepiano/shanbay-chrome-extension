@@ -12,13 +12,28 @@ var keyBinding= {
     66: 'baidu',
     87: 'wolframalpha'
 };
-$(document).keyup(function(event){
-    if (keyBinding.hasOwnProperty(event.which)) {
-        var link = $('#' + keyBinding[event.which]);
-        if(link[0]) {
-            chrome.runtime.sendMessage({'url': link.attr('href')});
+
+var options = {
+    wordTranslate: true,
+    exampleTranslate: true,
+    hideNotes: false,
+    useBaiduCollins: true,
+    googleImage: true,
+    wolframalpha: false,
+    enableShortcut: true,
+    baiduImage: true
+};
+
+// 绑定快捷键
+restore_options(function() {
+    $(document).keyup(function(event){
+        if (options.enableShortcut && keyBinding.hasOwnProperty(event.which)) {
+            var link = $('#' + keyBinding[event.which]);
+            if(link[0]) {
+                chrome.runtime.sendMessage({'url': link.attr('href')});
+            }
         }
-    }
+    });
 });
 
 var len = 0;
@@ -39,17 +54,6 @@ var imageSearchUrlTemplate = {
     google: 'http://www.google.com/search?tbm=isch&q={0}',
     wolframalpha :'http://www.wolframalpha.com/input/?i={0}'
 };
-
-var options = {
-    wordTranslate: true,
-    exampleTranslate: true,
-    hideNotes: false,
-    useBaiduCollins: true,
-    googleImage: true,
-    wolframalpha: false,
-    baiduImage: true
-};
-
 
 var current_word;
 var WordsBook = {};
@@ -184,7 +188,7 @@ function loadDefineFromBaiduDict(wordText) {
             return;
         }
         var collins = result.dict_result.collins;
-        if(!collins.menus && !collins.entry || collins.entry.length === 0) {
+        if(!collins.menus && (!collins.entry || collins.entry.length === 0)) {
             console.log('load nothing from baidu fanyi');
             return;
         }
@@ -196,7 +200,7 @@ function loadDefineFromBaiduDict(wordText) {
         if (collins.menus) {
             var menus = _.sortBy(collins.menus, 'item_id');
             html = _.reduce(menus, function (html, menu) {
-                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><p class="trans">{0.tran}</p><p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p>{1}</li>';
+                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><p class="trans">{0.tran}</p>' + (menu.usage_note ? '<p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p>' : '') + '{1}</li>';
                 return html + shanbayTemplate.format(menu, getEntrysHtml(menu.entry));
             }, html);
         } else {
@@ -386,6 +390,7 @@ function restore_options(callback) {
         useBaiduCollins: true,
         googleImage: true,
         wolframalpha: false,
+        enableShortcut: true,
         baiduImage: true
     }, function (items) {
         options = items;
