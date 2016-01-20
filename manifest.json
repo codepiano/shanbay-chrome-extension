@@ -1,6 +1,6 @@
 {
     "name": "扇贝",
-    "version": "1.4",
+    "version": "1.5",
     "description": "扇贝页面改造",
     "content_scripts": [
         {
@@ -20,6 +20,7 @@
     ],
     "icons": {
         "16": "./image/conch16.png",
+        "48": "./image/conch48.png",
         "128": "./image/conch128.png"
     },
     "background": {
