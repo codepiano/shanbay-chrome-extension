@@ -1,7 +1,7 @@
 {
     "name": "扇贝",
     "version": "1.5",
-    "description": "扇贝页面改造",
+    "description": "扇贝功能增强，添加加载单词所有柯林斯释义和例句，在搜索引擎中搜索该单词的图片等功能",
     "content_scripts": [
         {
             "matches": ["http://www.shanbay.com/bdc/review/"],
