@@ -27,6 +27,11 @@ var options = {
 // 绑定快捷键
 restore_options(function() {
     $(document).keyup(function(event){
+        var activeElement = document.activeElement;
+        var nodeName = activeElement.nodeName.toLowerCase();
+        if (activeElement.nodeType == 1 && (nodeName == "textarea" || nodeName == "input")) {
+            return;
+        }
         if (options.enableShortcut && keyBinding.hasOwnProperty(event.which)) {
             var link = $('#' + keyBinding[event.which]);
             if(link[0]) {
