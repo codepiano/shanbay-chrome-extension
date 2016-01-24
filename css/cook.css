@@ -1,3 +1,17 @@
+ul.menu {
+    font-size: 16px;
+    list-style: upper-roman;
+}
+
+li.menu-group-item {
+    border-bottom: solid 2px #CD3866;
+}
+
+.menu-item, .menu-trans, .usage-note, .usage-translation {
+    margin: 4px;
+    font-size: 16px;
+}
+
 ul.definition {
     margin-bottom: 0.8em;
     margin-left: 1em;
@@ -40,7 +54,7 @@ p.translation {
     padding-left: 5px;
 }
 
-.definition-index {
+.menu-index, .definition-index{
     font-size: 16px;
     line-height: 20px;
     padding: 8px;

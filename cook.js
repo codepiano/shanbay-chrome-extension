@@ -205,7 +205,7 @@ function loadDefineFromBaiduDict(wordText) {
         if (collins.menus) {
             var menus = _.sortBy(collins.menus, 'item_id');
             html = _.reduce(menus, function (html, menu) {
-                var shanbayTemplate = '<span class="menu-index pull-left">{0.item_id}. </span><li class="menu-group-item"><span class="item">{0.item}</span><p class="trans">{0.tran}</p>' + (menu.usage_note ? '<p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p>' : '') + '{1}</li>';
+                var shanbayTemplate = '<li class="menu-group-item"><span class="menu-item">{0.item}</span><span class="menu-trans">{0.tran}</span>' + (menu.usage_note ? '<p class="usage-note">{0.usage_note.note}</p><p class="usage-translation">{0.usage_note.translation}</p>' : '') + '{1}</li>';
                 return html + shanbayTemplate.format(menu, getEntrysHtml(menu.entry));
             }, html);
         } else {
@@ -259,6 +259,11 @@ function loadDefineFromBaiduDict(wordText) {
             var html = _.reduce(meanTypes, function (html, meanType) {
                 var meanTypeTemplate = '<li class="example-group-item"><p class="def">{def}</p><p class="annotation">{ex}</p>' + (options.exampleTranslate ? '<p class="translation">{tran}</p>' : '') + '</li>';
                 var example = meanType.example ? meanType.example[0] : meanType.posc[0].example[0];
+                // 高亮例句中的单词
+                var highlightedEx = highlightWord(example.ex);
+                if(highlightedEx !== null) {
+                    example.ex = highlightedEx;
+                }
                 return html + meanTypeTemplate.format(example);
             }, '');
             return html + defxHtml;
@@ -267,6 +272,89 @@ function loadDefineFromBaiduDict(wordText) {
     .fail(function () {
         console.log('can not load baidu fanyi, ajax failed');
     });
+}
+
+// 高亮例句中的单词
+function highlightWord(example) {
+    if(current_word.indexOf(' ') === -1) {
+        // 单词匹配
+        var regex = new RegExp('([ .,?!\';]|\\.\\.\\.|^)(' + current_word + ')([ .,?!\';…]|\\.\\.\\.|\'s)', 'gi');
+        if(example.match(regex)) {
+            return example.replace(regex, '$1<vocab>$2</vocab>$3');
+        }
+        // 简单的时态变化
+        var regexTense = new RegExp('([ .,?!\';]|\\.\\.\\.|^)(' + current_word + ')(s|es|ing|ed|d)([ .,?!\';…]|\\.\\.\\.)', 'gi');
+        if(example.match(regexTense)) {
+            return example.replace(regexTense, '$1<vocab>$2$3</vocab>$4');
+        }
+        // 处理结尾为e的ing变形
+        if(current_word.charAt(current_word.length - 1) === 'e') {
+            var ingTense = current_word.slice(0, -1) + 'ing';
+            var regexIng = new RegExp('([ .,?!\';]|\\.\\.\\.|^)(' + ingTense + ')([ .,?!\';…]|\\.\\.\\.)', 'gi');
+            return example.replace(regexIng, '$1<vocab>$2</vocab>$3');
+        }
+        // 处理结尾为s的复数变形
+        if(current_word.charAt(current_word.length - 1) === 'y') {
+            var endWithYTense = current_word.slice(0, -1) + 'ies';
+            var regexY = new RegExp('([ .,?!\';]|\\.\\.\\.|^)(' + endWithYTense + ')([ .,?!\';…]|\\.\\.\\.)', 'gi');
+            return example.replace(regexY, '$1<vocab>$2</vocab>$3');
+        }
+    }
+    return null;
+}
+
+function multiMatch(example) {
+    // 短语匹配
+    var words = current_word.split(' ');
+    var indices = _.map(words, findAllPosition);
+    if(indices && indices.length > 0) {
+        var anchorWordIndex = _.findIndex(indices, function(wordPositions){return wordPositions && wordPositions.length === 1;});
+        if(anchorWordIndex !== -1) {
+            // 确定一个锚点单词
+            var anchor = indices[anchorWordIndex][0];
+            // 选离锚点最近的单词
+            var replacePosition = _.map(indices, function(value, index){
+                var firstGreater;
+                if(index === anchorWordIndex) {
+                    return value[0];
+                } else if(index < anchorWordIndex) {
+                    firstGreater =  _.findIndex(value, function(position){ return position > anchor;});
+                    if(firstGreater < 1) {
+                        return -1;
+                    }
+                    return value[firstGreater - 1];
+                } else if(index > anchorWordIndex) {
+                    firstGreater =  _.findIndex(value, function(position){ return position > anchor;});
+                    if(firstGreater === -1) {
+                        return -1;
+                    }
+                    return value[firstGreater];
+                }
+            });
+            // 出现顺序不一致，返回空
+            if(_.any(replacePosition, function(value){return value === -1;})) {
+                return null;
+            }
+            // 倒序切割字符串，不会影响前面的position
+            replacePosition.reverse();
+            words.reverse();
+            return _.reduce(replacePosition, function(sentence, position, index) {
+                var wordLength = words[index].length;
+                return sentence.slice(0, position) + '<vocab>' + sentence.slice(position, position + wordLength) + '</vocab>' + sentence.slice(position + wordLength);
+            }, example);
+        }
+    }
+
+    function findAllPosition(word) {
+        var positions = [];
+        var pos = example.indexOf(word);
+        while (pos !== -1) {
+            positions.push(pos);
+            pos = example.indexOf(word, pos + 1);
+        }
+        return positions;
+    }
+
 }
 
 // 加载单词解释
