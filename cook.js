@@ -50,10 +50,6 @@ var shanbayAPI = {
     wordExample: 'http://www.shanbay.com/api/v1/bdc/example/sys/'
 };
 
-var baiduAPI = {
-    translateV2: 'http://fanyi.baidu.com/v2transapi'
-};
-
 var imageSearchUrlTemplate = {
     baidu: 'http://image.baidu.com/search/index?tn=baiduimage&word={0}',
     google: 'http://www.google.com/search?tbm=isch&q={0}',
@@ -176,18 +172,8 @@ function collinsEnabled() {
 
 // 加载百度翻译中的柯林斯辞典
 function loadDefineFromBaiduDict(wordText) {
-    $.ajax({
-        url: baiduAPI.translateV2,
-        data: {
-            from: 'en',
-            to: 'zh',
-            query: wordText,
-            transtype: 'realtime',
-            simple_means_flag: 3
-        },
-        method: 'POST'
-    })
-    .done(function (result) {
+    chrome.runtime.sendMessage({'wordText': wordText}, callback);
+    function callback(result) {
         if (!result.dict_result || !result.dict_result.collins) {
             console.log('load nothing from baidu fanyi');
             return;
@@ -268,10 +254,7 @@ function loadDefineFromBaiduDict(wordText) {
             }, '');
             return html + defxHtml;
         }
-    })
-    .fail(function () {
-        console.log('can not load baidu fanyi, ajax failed');
-    });
+    }
 }
 
 // 高亮例句中的单词
