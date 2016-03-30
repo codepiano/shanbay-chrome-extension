@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             method: 'POST'
         })
         .done(function (result) {
-            sendResponse(result);
+            sendResponse({'word': request.wordText, 'data': result});
         })
         .fail(function () {
             sendResponse(null);
