@@ -15,9 +15,9 @@ var keyBinding= {
 
 // 扇贝API
 var shanbayAPI = {
-    wordsList: 'http://www.shanbay.com/api/v1/bdc/review/',
-    wordDefines: 'http://www.shanbay.com/api/v1/bdc/vocabulary/definitions/',
-    wordExample: 'http://www.shanbay.com/api/v1/bdc/example/sys/',
+    wordsList: 'https://www.shanbay.com/api/v1/bdc/review/',
+    wordDefines: 'https://www.shanbay.com/api/v1/bdc/vocabulary/definitions/',
+    wordExample: 'https://www.shanbay.com/api/v1/bdc/example/sys/',
     collinsPay: 'https://www.shanbay.com/api/v1/market/userapplet/applet/collins/'
 };
 
@@ -32,7 +32,7 @@ var options = {
     wordTranslate: true,
     exampleTranslate: true,
     hideNotes: false,
-    useBaiduCollins: true,
+    useBaiduCollins: false,
     googleImage: true,
     wolframalpha: false,
     enableShortcut: true,
@@ -66,7 +66,7 @@ var currentWord;
 // 扇贝柯林斯数据对象
 var WordsBook = {};
 // 判断用户是否购买了柯林斯词典
-collinsEnabledFromShanbay();
+// collinsEnabledFromShanbay();
 
 function reviewContentChange(mutations) {
     // 判断是否插入了 DOM 节点
@@ -95,7 +95,7 @@ function reviewContentChange(mutations) {
         return;
     }
     var wordText = getWordNodeText();
-    if ((!wordText || wordText === currentWord) && preloadResult === null) {
+    if (!wordText || wordText !== currentWord) {
         return;
     } else {
         currentWord = wordText;
@@ -524,7 +524,7 @@ function restoreOptions(callback) {
         wordTranslate: true,
         exampleTranslate: true,
         hideNotes: false,
-        useBaiduCollins: true,
+        useBaiduCollins: false,
         googleImage: true,
         wolframalpha: false,
         enableShortcut: true,
