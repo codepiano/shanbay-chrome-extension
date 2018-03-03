@@ -94,12 +94,17 @@ function reviewContentChange(mutations) {
     if (!learningDetailContainer) {
         return;
     }
+
     var wordText = getWordNodeText();
     if (!wordText || wordText !== currentWord) {
         return;
     } else {
         currentWord = wordText;
     }
+
+    // 模拟点击，将笔记切换到“共享笔记”；
+    $("a.note-user-box-tab")[0].click();
+
     // 加载插件选项
     restoreOptions(function(){
         if (options.useBaiduCollins) {
@@ -441,11 +446,13 @@ function setCollinsSenseId(word, index) {
     });
 }
 
+
+
 // 生成扇贝柯林斯html
 function loadCollinsView(word) {
     var html = _.reduce(word.definitions, function (html, definition, index) {
-        var shanbayTemplate = '<span class="definition-index pull-left">{0}. </span><li class="definition-group-item">{1}<ul class="example">{2}</ul></li>';
-        return html + shanbayTemplate.format(index + 1, (definition.endf || definition.cndf), getExamplesHtml(definition.examples));
+    var shanbayTemplate = '<span class="definition-index pull-left">{0}. </span><li class="definition-group-item"><div class="definition">[{1}] <span class="chinese_definition">{2}</span>; <span class="english_definition">{3}</span></div><ul class="example">{4}</ul></li>';
+        return html + shanbayTemplate.format(index + 1, definition.pos3, definition.cndf, definition.endf, getExamplesHtml(definition.examples));
     }, '<ul class="definition">');
     html += '</ul>';
     replaceDefaultDefinition(html);
