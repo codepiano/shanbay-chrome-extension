@@ -27,6 +27,28 @@ li.definition-group-item {
     margin-left: 1em;
 }
 
+span.chinese_definition{
+    font-family: Helvetica,sans-serif;
+
+}
+
+span.english_definition{
+    font-family: Helvetica,sans-serif;
+    color: rgb(192,23,27);
+}
+
+vocab{
+    color: #4275BA;
+    font-weight: bold;
+}
+
+div.definition{
+    background-color: rgb(230,247,248);
+    padding: 2px 0 2px 0;
+}
+
+
+
 ul.example {
     margin-top: 10px;
 }
@@ -60,14 +82,14 @@ p.translation {
     padding: 8px;
 }
 
-li > vocab {
+/*li > vocab {
     font-weight: bold;
-}
+}*/
 
-p > vocab {
+/*p > vocab {
     color: #4275BA;
 }
-
+*/
 span.posp {
     margin-right: 5px;
     color: #FF7E00;
